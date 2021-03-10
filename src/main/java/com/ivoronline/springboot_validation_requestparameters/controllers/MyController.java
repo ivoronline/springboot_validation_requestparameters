@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 @Controller
 @Validated
@@ -22,7 +23,7 @@ public class MyController {
   @RequestMapping("/Hello")
   public String hello(
     @RequestParam @NotBlank String  name,
-    @RequestParam @NotBlank Integer age
+    @RequestParam @NotNull  Integer age
   ) {
     return "Hello " + name;
   }
