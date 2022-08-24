@@ -1,40 +1,33 @@
 package com.ivoronline.springboot_validation_requestparameters.controllers;
 
-import org.springframework.http.HttpStatus;
-import org.springframework.stereotype.Controller;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.MissingServletRequestParameterException;
-import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.*;
+import javax.validation.ConstraintViolationException;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
-@Controller
 @Validated
+@RestController
 public class MyController {
 
   //==================================================================
   // HELLO
   //==================================================================
-  @ResponseBody
-  @RequestMapping("/Hello")
-  public String hello(
-    @RequestParam @NotBlank String  name,
-    @RequestParam @NotNull  Integer age
+  @RequestMapping("Hello")
+  String hello(
+    @NotBlank @RequestParam String  name,
+    @NotNull  @RequestParam Integer age
   ) {
     return "Hello " + name;
   }
 
   //==================================================================
-  // HANDLE EXCEPTIONS (it only catches first exception)
+  // MISSING PARAMETER EXCEPTIONS    (it only catches first exception)
   //==================================================================
-  @ResponseBody
-  @ResponseStatus(HttpStatus.BAD_REQUEST)
+  // http://localhost:8080/Hello
   @ExceptionHandler(MissingServletRequestParameterException.class)
-  public String handleExceptions(MissingServletRequestParameterException exception) {
+  public String missingParameterExceptions(MissingServletRequestParameterException exception) {
 
     //GET EXCEPTION DETAILS
     String parameterType = exception.getParameterType(); //String
@@ -43,6 +36,16 @@ public class MyController {
 
     //RETURN MESSAGE
     return message;
+
+  }
+
+  //==================================================================
+  // CONSTRAINT VIOLATION EXCEPTIONS
+  //==================================================================
+  // http://localhost:8080/Hello?name=
+  @ExceptionHandler(ConstraintViolationException.class)
+  public String constraintViolationExceptions(ConstraintViolationException exception) {
+    return exception.getMessage();     //validateHTTPParameters.name: must not be blank
   }
 
 }
