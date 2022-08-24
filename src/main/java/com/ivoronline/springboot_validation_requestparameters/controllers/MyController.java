@@ -16,7 +16,7 @@ public class MyController {
   //==================================================================
   @RequestMapping("Hello")
   String hello(
-    @NotBlank(message = "Name should not be blank") @RequestParam String  name,
+    @NotBlank(message = "Name should not be blank") @RequestParam String  name, //Optional Custom Message
     @NotNull                                        @RequestParam Integer age
   ) {
     return "Hello " + name;
